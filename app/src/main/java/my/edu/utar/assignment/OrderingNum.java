@@ -73,7 +73,8 @@ public class OrderingNum extends AppCompatActivity {
                     // Handle confirm button click when all numbers are input
                     handleConfirm();
                 } else {
-                    Toast.makeText(OrderingNum.this, "Please select all 4 numbers", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderingNum.this, "Please select all 4 numbers",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -106,7 +107,7 @@ public class OrderingNum extends AppCompatActivity {
 
         // Generate unique random numbers
         while (numbers.size() < 4) {
-            int randomNumber = random.nextInt(100); // Generate a random number between 0 and 99
+            int randomNumber = random.nextInt(100);
             if (!numbers.contains(randomNumber)) {
                 numbers.add(randomNumber);
             }
@@ -152,7 +153,8 @@ public class OrderingNum extends AppCompatActivity {
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
         } else {
             // User input is incorrect
-            Toast.makeText(this, "Incorrect! Please try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Incorrect! Please try again.",
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Reset userInput and display buttons again
@@ -183,7 +185,7 @@ public class OrderingNum extends AppCompatActivity {
         }
         String userNumbers = builder.toString();
         if (userNumbers.endsWith(" ,  ")) {
-            userNumbers = userNumbers.substring(0, userNumbers.length() - 4); // Remove the trailing comma
+            userNumbers = userNumbers.substring(0, userNumbers.length() - 4); // Remove last comma
         }
         String order = ascendingOrder ? "ascending" : "descending";
         String instruction = "Order the numbers in \n" + order + " order\n" + userNumbers;

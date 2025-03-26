@@ -90,7 +90,8 @@ public class CompareNum extends AppCompatActivity {
         number1 = random.nextInt(100);
         number2 = random.nextInt(100);
         isGreaterThan = random.nextBoolean(); // Randomly select comparison type
-        instructionTextView.setText(isGreaterThan ? "Choose the bigger number." : "Choose the smaller number.");
+        instructionTextView.setText(isGreaterThan
+                ? "Choose the bigger number." : "Choose the smaller number.");
         buttonNumber1.setText(String.valueOf(number1));
         buttonNumber2.setText(String.valueOf(number2));
     }

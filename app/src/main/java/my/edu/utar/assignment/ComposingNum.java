@@ -22,6 +22,7 @@ public class ComposingNum extends AppCompatActivity {
     private int num1, num2, answer;
     private boolean isAddition;
     private String originalEquation;
+    private int selectionsCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +53,24 @@ public class ComposingNum extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleConfirm();
+                if (selectionsCount < 2) {
+                    Toast.makeText(ComposingNum.this, "Please select 2 numbers",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    handleConfirm();
+                }
             }
         });
 
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                undoLastSelection();
+                if (selectionsCount > 0) {
+                    undoLastSelection();
+                } else {
+                    Toast.makeText(ComposingNum.this, "No more inputs to undo",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -81,7 +92,7 @@ public class ComposingNum extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             int randomNumber;
             do {
-                randomNumber = random.nextInt(10); // Generate a random number between 0 and 9
+                randomNumber = random.nextInt(10); // Generate a random number between 0-9
             } while (options.contains(randomNumber));
             options.add(randomNumber);
         }
@@ -89,15 +100,20 @@ public class ComposingNum extends AppCompatActivity {
         // Shuffle the options
         Collections.shuffle(options);
 
-        // Select two numbers to be num1 and num2
-        num1 = options.get(0);
-        num2 = options.get(1);
+        // Randomly select two numbers to be added or subtracted
+        int num1Index = random.nextInt(4);
+        int num2Index;
+        do {
+            num2Index = random.nextInt(4);
+        } while (num2Index == num1Index);
 
-        // Randomly select addition or subtraction
+        // Set the numbers and operation
+        int selectedNum1 = options.get(num1Index);
+        int selectedNum2 = options.get(num2Index);
         isAddition = random.nextBoolean();
 
         // Compute the answer based on whether it's an addition or subtraction equation
-        answer = isAddition ? num1 + num2 : num1 - num2;
+        answer = isAddition ? selectedNum1 + selectedNum2 : selectedNum1 - selectedNum2;
 
         // Set the equation text view with placeholders
         originalEquation = "? " + (isAddition ? "+ " : "- ") + "? = " + answer;
@@ -112,6 +128,9 @@ public class ComposingNum extends AppCompatActivity {
 
         // Make undo button visible
         undoButton.setVisibility(View.VISIBLE);
+
+        // Reset selections count
+        selectionsCount = 0;
     }
 
 
@@ -127,6 +146,9 @@ public class ComposingNum extends AppCompatActivity {
 
         // Hide the clicked button
         button.setVisibility(View.INVISIBLE);
+
+        // Increment selections count
+        selectionsCount++;
     }
 
     private void handleConfirm() {
@@ -142,14 +164,16 @@ public class ComposingNum extends AppCompatActivity {
                 Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                 generateEquation();
             } else {
-                Toast.makeText(this, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Incorrect! Try again.",
+                        Toast.LENGTH_SHORT).show();
             }
         } else {
             if (selectedNum1 - selectedNum2 == answer) {
                 Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                 generateEquation();
             } else {
-                Toast.makeText(this, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Incorrect! Try again.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -161,6 +185,11 @@ public class ComposingNum extends AppCompatActivity {
         // Make all number buttons visible again
         for (Button button : numberButtons) {
             button.setVisibility(View.VISIBLE);
+        }
+
+        // Decrement selections count
+        if (selectionsCount > 0) {
+            selectionsCount--;
         }
     }
 }
